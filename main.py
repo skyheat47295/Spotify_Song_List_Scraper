@@ -1,22 +1,16 @@
 # Spotify_Song_List_Scraper
 
-# import lxml
-# import requests
-# from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 raw_song_list = []
 song_index = [['TITLE', ' ARTIST', ' ALBUM', ' DATE ADDED', ' LENGTH']]
-total_songs = 2000
+total_songs = 2000  # Next time will grab total songs from web scrape
 
-driver = webdriver.Chrome(executable_path='C:/Users/lawng/Downloads/chromedriver_win32/chromedriver.exe')
+driver = webdriver.Chrome(executable_path='C:/Users/redacted/Downloads/chromedriver_win32/chromedriver.exe')
 spotify_url = 'https://open.spotify.com/collection/tracks'  # need to login and navigate to list
 driver.get(spotify_url)  # don't forget to pause so user can login and click on the liked songs list
 html = driver.find_element_by_tag_name("body")
 driver.find_element_by_tag_name("body").click()
-
-# match = driver.find_element_by_tag_name("body").text
-# html.send_keys(Keys.END)
 
 while len(song_index) < total_songs:
     match = html.text
@@ -39,17 +33,14 @@ while len(song_index) < total_songs:
     raw_song_list = stripped5.split('\n')
     for i in range(len(raw_song_list)):
         if raw_song_list[i].split('|')[:1:][0] == 'TITLE':
-            #song_index[0] = raw_song_list[i].split('|')
             continue
         if raw_song_list[i] not in song_index:
             song_index.append(raw_song_list[i])
 
     for x in range(3):
         html.send_keys(Keys.PAGE_DOWN)
-print(song_index[-1])
-print(song_index)
 
-file1 = open("C:/Users/lawng/Downloads/MMsongs.txt", "w")
+file1 = open("C:/Users/redacted/Downloads/songs.txt", "w")
 for songs in song_index:
     for record in songs:
         file1.writelines([record])
